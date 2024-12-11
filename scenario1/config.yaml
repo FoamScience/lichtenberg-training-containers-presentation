@@ -1,0 +1,18 @@
+containers:
+  basic:
+    openfoam-hpctoolkit:
+      os:
+        distro: ubuntu
+        version: 24.04
+      mpi:
+        implementation: openmpi
+        version: 4.1.5
+      framework:
+        - definition: com-openfoam
+          version: 2312
+        - definition: hpctoolkit
+          version: 2024.01.99-next
+pull:
+  try_to_pull: true
+  protocol: "oras"
+  scope: "ghcr.io/foamscience"
