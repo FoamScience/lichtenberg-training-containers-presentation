@@ -1,0 +1,715 @@
+defaults:
+  - meta: config.yaml
+  - default_styling: config.yaml
+  - _self_
+
+version: 0.1.0
+
+scene: 2D
+
+slides:
+
+  - title: We'll look at...
+    number: "   "
+    content:
+      - type: items
+        bullets:
+          - "Introduction to Containers for HPCs"
+          - "Cluster admins and container tech"
+          - "Apptainer containers 101"
+          - "A convenient apptainer containers mechanism"
+          - "Apptainer containers for OpenFOAM"
+          - "Concluding remarks" 
+        next_to:
+          target: "{{ last }}"
+          dir: 4*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT
+
+  - title: "Introduction to Containers for HPCs"
+    number: "1❱"
+    content:
+      - type: diagram
+        steps:
+          - type: rectangle
+            text: Write Code
+            color: self.main_color
+            opacity: 0.1
+            next_to:
+              target: "{{ title }}"
+              dir: 3.5*DOWN
+            align_to:
+              target: "{{ title }}"
+              dir: LEFT
+          - type: group
+            last_is_group: false
+            kind: "rectangle"
+            color: self.warn_color
+            opacity: 0.1
+            padding: 1.6
+            steps:
+              - type: rectangle
+                text: Build
+                color: self.main_color
+                opacity: 0.0
+                next_to:
+                  target: "{{ last }}"
+                  dir: 2*RIGHT
+                arrow_from: "{{ last }}"
+                arrow_color: self.main_color
+                no_next_slide: true
+              - type: rectangle
+                text: Test
+                color: self.main_color
+                opacity: 0.0
+                next_to:
+                  target: "{{ last }}"
+                  dir: 2*RIGHT
+                arrow_from: "{{ last }}"
+                arrow_color: self.main_color
+            label:
+              type: text
+              text: containerize local dev
+              color: self.warn_color
+              next_to:
+                target: "{{ last }}"
+                dir: UP
+              align_to:
+                target: "{{ last }}"
+                dir: RIGHT
+    
+          - type: rectangle
+            text: Push to Version Control
+            color: self.main_color
+            opacity: 0.1
+            next_to:
+              target: "{{ last }}"
+              dir: 2*RIGHT
+            arrow_from: "{{ last }}"
+            arrow_color: self.main_color
+    
+          - type: rectangle
+            text: Trigger CI
+            color: self.secondary_color
+            opacity: 0.3
+            next_to:
+              target: "{{ last }}"
+              dir: 3.5*DOWN+2*RIGHT
+            arrow_from: "{{ last }}"
+            arrow_color: self.secondary_color
+    
+          - type: group
+            last_is_group: false
+            kind: "rectangle"
+            color: self.warn_color
+            opacity: 0.1
+            padding: 1.1
+            steps:
+              - type: rectangle
+                text: Build
+                color: self.secondary_color
+                opacity: 0.0
+                next_to:
+                  target: "{{ last }}"
+                  dir: 2*LEFT
+                arrow_from: "{{ last }}"
+                arrow_color: self.secondary_color
+                no_next_slide: true
+              - type: rectangle
+                text: Test
+                color: self.secondary_color
+                opacity: 0.0
+                next_to:
+                  target: "{{ last }}"
+                  dir: 2*LEFT
+                arrow_from: "{{ last }}"
+                arrow_color: self.secondary_color
+                no_next_slide: true
+            label:
+              type: text
+              text: containerize CI
+              color: self.warn_color
+              next_to:
+                target: "{{ last }}"
+                dir: UP
+              align_to:
+                target: "{{ last }}"
+                dir: LEFT
+    
+          - type: rectangle
+            text: Deploy/Release
+            color: self.secondary_color
+            opacity: 0.3
+            next_to:
+              target: "{{ last }}"
+              dir: 2*LEFT
+            arrow_from: "{{ last }}"
+            arrow_color: self.secondary_color
+    
+          - type: rectangle
+            text: Fetch Code
+            color: self.important_color
+            opacity: 0.3
+            next_to:
+              target: "{{ last }}"
+              dir: 4*DOWN+2*LEFT
+            arrow_from: "{{ last }}"
+            arrow_color: self.important_color
+    
+          - type: group
+            last_is_group: false
+            kind: "rectangle"
+            color: self.warn_color
+            opacity: 0.1
+            padding: 1.1
+            steps:
+              - type: rectangle
+                text: Run on HPC
+                color: self.important_color
+                opacity: 0.0
+                next_to:
+                  target: "{{ last }}"
+                  dir: 2*RIGHT
+                arrow_from: "{{ last }}"
+                arrow_color: self.important_color
+                no_next_slide: true
+              - type: rectangle
+                text: Analyze Results
+                color: self.important_color
+                opacity: 0.0
+                next_to:
+                  target: "{{ last }}"
+                  dir: 2*RIGHT
+                arrow_from: "{{ last }}"
+                arrow_color: self.important_color
+            label:
+              type: text
+              text: containerize on HPC
+              color: self.warn_color
+              next_to:
+                target: "{{ last }}"
+                dir: UP
+              align_to:
+                target: "{{ last }}"
+                dir: RIGHT
+      - type: reset
+      - type: text
+        text: Two common types for isolation
+        next_to:
+          target: "{{ title }}"
+          dir: 3*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+      - type: text
+        text: Containers
+        weights:
+          - text: Containers
+            weight: BOLD
+        next_to:
+          target: "{{ last }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+        no_next_slide: true
+      - type: text
+        text: Virtual machines
+        weights:
+          - text: Virtual machines
+            weight: BOLD
+        next_to:
+          target: "{{ last }}"
+          dir: RIGHT
+        shift: 6.5*RIGHT
+        no_next_slide: true
+      - type: separator
+        start: -0.5*UP
+        end: 2*UP
+      - type: items
+        bullets:
+          - "Partial isolation from host"
+          - "Uses host's Kernel"
+          - "Controlled versionning of dependencies"
+        next_to:
+          target: "{{ title }}"
+          dir: 9*DOWN
+        to_edge: LEFT
+      - type: items
+        bullets:
+          - "Full isolation from host"
+          - "Dedicated resources"
+          - "Provisionning overhead"
+        next_to:
+          target: "{{ title }}"
+          dir: 9*DOWN
+        shift: 6.5*RIGHT
+
+      - type: text
+        text: "Main Objective: cluster-agnostic sharing and reproducing of scientific workflows/data"
+        next_to:
+          target: "{{ title }}"
+          dir: 17*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+
+      - type: reset
+
+      - type: text
+        text: Two container usage aspects
+        next_to:
+          target: "{{ title }}"
+          dir: 3*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+      - type: text
+        text: Image creation and hosting
+        weights:
+          - text: Image creation and hosting
+            weight: BOLD
+        next_to:
+          target: "{{ last }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+        no_next_slide: true
+      - type: text
+        text: Container runs
+        weights:
+          - text: Container runs
+            weight: BOLD
+        next_to:
+          target: "{{ last }}"
+          dir: ORIGIN
+        shift: 5.5*RIGHT
+        no_next_slide: true
+      - type: separator
+        start: -1.5*UP+LEFT
+        end: 2*UP+LEFT
+      - type: items
+        bullets:
+          - "Build from definition files?"
+          - "Can CI/CD build images?"
+          - "Main purpose of the image?"
+          - "Host images at public HUBs"
+        next_to:
+          target: "{{ title }}"
+          dir: 9*DOWN
+        to_edge: LEFT
+      - type: items
+        bullets:
+          - "MPI/Slurm compatibility?"
+          - "Integration with HPC infrastructure"
+          - "User convenience, even with minimal training"
+          - "Security!!!" 
+        next_to:
+          target: "{{ title }}"
+          dir: 9*DOWN
+        shift: 4.5*RIGHT
+
+  - title: "Cluster admins and container tech"
+    number: "2❱"
+    content:
+      - type: svg
+        image: Docker.svg
+        height: 1.2
+        no_next_slide: true
+        shift: RIGHT
+      - type: text
+        text: "Docker: most popular"
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        weights:
+          - text: "Docker:"
+            weight: BOLD
+      - type: svg
+        image: Podman.svg
+        height: 1.2
+        no_next_slide: true
+        shift: 2*UP+4*RIGHT
+      - type: text
+        text: "Podman: avoids Docker's daemon"
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        weights:
+          - text: "Podman:"
+            weight: BOLD
+      - type: svg
+        image: Sarus.svg
+        height: 1.2
+        no_next_slide: true
+        shift: 1.5*DOWN+4*RIGHT
+      - type: text
+        text: "SARUS: HPC-focused"
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        weights:
+          - text: "SARUS:"
+            weight: BOLD
+      - type: svg
+        image: Singularity.svg
+        height: 1.2
+        no_next_slide: true
+        shift: 2*UP+3.5*LEFT
+      - type: text
+        text: "Singularity: Single-Process-Execution"
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        weights:
+          - text: "Singularity:"
+            weight: BOLD
+      - type: svg
+        image: Apptainer.svg
+        height: 1.2
+        no_next_slide: true
+        shift: DOWN+3.5*LEFT
+      - type: text
+        text: "Apptainer: Modernized Singularity fork"
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        weights:
+          - text: "Apptainer:"
+            weight: BOLD
+
+  - title: "Apptainer containers 101"
+    number: "3❱"
+    content:
+      - type: code
+        language: bash
+        line_numbers: true
+        code: |
+          # definition file for a dummy image: test.def prodcing test.sif
+           
+          Bootstrap: docker # or localimage
+          From: ubuntu:latest  # <- starting image
+          
+          %post -c /bin/bash   # <- default is sh
+              echo "echo Sourced /bashrc" > /bashrc
+          
+          %environment # <- set environment when run'ing/exec'ing
+              #!/bin/bash
+              source /bashrc
+          
+          %runscript   # <- what to do when 'apptainer run image.sif'
+              if [ $# -eq 0 ]; then /bin/bash; else /bin/bash -c "$@"; fi
+        steps:
+          - modification:
+            - 6: "   "
+            - 7: "   "
+            - 9: "   "
+            - 10: "   "
+            - 11: "   "
+          - modification:
+            - 9: "   "
+            - 10: "   "
+            - 11: "   "
+      - type: reset
+      - type: code
+        language: bash
+        line_numbers: true
+        code: |
+          apptainer build test.sif test.def # <- build test.sif image
+
+          apptainer run -C test.sif         # <- run in more isolated mode
+          apptainer run test.sif            # <- share env., PIDs... etc
+          apptainer run test.sif hostname   # <- run a command and exit
+
+          apptainer exec test.sif hostname  # <- skips %runscript
+
+          apptainer push test.sif oras://ghcr.io/USER/REPO:version
+          apptainer pull oras://ghcr.io/USER/REPO:version 
+
+  - title: "A convenient apptainer containers mechanism"
+    number: "4❱"
+    content:
+      - type: text
+        text: Automated container building based on YAML configs using Ansible
+        next_to:
+          target: "{{ title }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+      - type: code
+        language: yaml
+        line_numbers: true
+        code: |
+          containers:
+            basic:
+              opencfd-openfoam:
+                os:
+                  distro: ubuntu
+                  version: 24.04
+                mpi:
+                  implementation: openmpi
+                  version: 4.1.5
+                framework:
+                  definition: com-openfoam
+                  version: 2312
+                  git_ref: default
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        to_edge: LEFT
+      - type: code
+        language: yaml
+        line_numbers: true
+        line_number_from: 13
+        code: |
+            projects:
+              test:
+                base_container: opencfd-openfoam
+                definition: projects/test.def
+                build_args:
+                  branch:
+                    - master
+        align_to:
+          target: "{{ last }}"
+          dir: UP
+        to_edge: RIGHT
+      - type: reset
+      - type: code
+        language: shell
+        line_numbers: true
+        code: |
+          # Get dependency repo to a temp location
+          git clone https://github.com/FoamScience/openfoam-apptainer-packaging /tmp/tainers
+
+          # build (in this order):
+          #       containers/basic/ubuntu-24.04-openmpi-4.1.5.sif
+          #       containers/basic/opencfd-openfoam.sif
+          #       containers/projects/test-master.sif       <- your final container
+          # original dir is where your config.yaml is located
+          ansible-playbook /tmp/tainers build.yaml \
+              --extra-vars "original_dir=$PWD" \
+              --extra-vars "@config.yaml" 
+      - type: reset
+      - type: code
+        language: bash
+        line_numbers: true
+        code: |
+          # definition files are now templated!
+           
+          Bootstrap: localimage
+          From: {{ CONTAINERS_DIR }}/basic/{{ BASE_CONTAINER }}.sif
+          
+          %post -c /bin/bash   # <- default is sh
+              echo "compiling {{ BRANCH }}"
+              # also, write meta data to /apps.json file
+          
+          %environment #
+              #!/bin/bash
+              # unified sourcing of bashrcs and python envs here
+          
+          %runscript   # <- always looks like this
+              if [ $# -eq 0 ]; then /bin/bash; else /bin/bash -c "$@"; fi
+      - type: reset
+      - type: code
+        language: shell
+        background: rectangle
+        line_numbers: false
+        code: |
+          apptainer run containers/projects/test-master.sif info
+        shift: 2.3*UP
+      - type: code
+        language: json
+        line_numbers: true
+        code: |
+          "openmpi": {
+            "version": "4.1.5"
+          },
+          "openfoam": {
+            "fork": "com-openfoam",
+            "branch": "default",
+            "commit": "default",
+            "version": "2312"
+          },
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        to_edge: LEFT
+        no_next_slide: true
+      - type: code
+        language: json
+        line_numbers: true
+        line_number_from: 10
+        code: |
+          "test": {
+            "ompi_test": "/opt/OMPIFoam/ompiTest",
+            "foam_test": "/opt/OMPIFoam/testOMPIFoam",
+            "branch": "master"
+          }
+        align_to:
+          target: "{{ last }}"
+          dir: UP
+        to_edge: RIGHT
+
+  - title: "Apptainer containers for OpenFOAM"
+    number: "5❱"
+    content:
+      - type: text
+        text: "Scenario 1: OpenFOAM scalability study"
+        weights:
+          - text: "Scenario 1:"
+            weight: BOLD
+        next_to:
+          target: "{{ title }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+      - type: items
+        bullets:
+          - Assume we have a configuration that builds a project in Opt/Debug modes
+          - Want to add HPCToolkit to the Debug container
+          - Upload the SIF file to multiple clusters and compare scalability
+        next_to:
+          target: "{{ last }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT
+      - type: items
+        bullets:
+          - The project's definition file is mostly a SHELL language
+          - So, minimal maintenance overhead for the definition files
+          - The YAML configuration file allows seamlessly stitching base containers!
+          - Also, it allows loading your own base container definitions
+        next_to:
+          target: "{{ last }}"
+          dir: 3*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT
+      - type: reset
+      - type: code
+        language: yaml
+        line_numbers: true
+        code: |
+          containers:
+            basic:
+              opencfd-openfoam:
+                os:
+                  distro: ubuntu
+                  version: 24.04
+                mpi:
+                  implementation: openmpi
+                  version: 4.1.5
+                framework:
+                  - definition: com-openfoam
+                    version: 2312
+                  - definition: hpctoolkit
+                    version: 2024.01.99-next
+        steps:
+          - modification:
+            - 11: "        definition: com-openfoam"
+            - 12: "        version: 2312"
+            - 13: "     "
+            - 14: "##################################"
+        next_to:
+          target: "{{ title }}"
+          dir: DOWN
+        to_edge: LEFT
+      - type: code
+        language: yaml
+        line_numbers: true
+        line_number_from: 15
+        code: |
+            projects:
+              my_project:
+                base_container: opencfd-openfoam
+                definition: my_project.def
+                build_args:
+                  mode:
+                    - Debug
+        align_to:
+          target: "{{ last }}"
+          dir: UP
+        to_edge: RIGHT
+      - type: reset
+      - type: text
+        text: "Scenario 2: Test things on a makeshift cluster"
+        weights:
+          - text: "Scenario 2:"
+            weight: BOLD
+        next_to:
+          target: "{{ title }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ title }}"
+          dir: LEFT
+      - type: items
+        bullets:
+          - Spawn Docker containers to act as "SLURM cluster" nodes
+          - The nodes only need to have SLURM, Apptainer and some MPI installed
+          - Build your container images locally
+          - Upload them to the head node
+          - Run the containers in MPI-hybrid mode
+        next_to:
+          target: "{{ last }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT
+      - type: code
+        language: yaml
+        line_numbers: true
+        code: |
+            # from the head node, these should say same things
+            srun -N 3 hostname
+            srun -N 3 apptainer run my.sif hostname
+            # also valid if hostname were to support MPI
+        next_to:
+          target: "{{ last }}"
+          dir: DOWN
+        shift: 3*RIGHT
+
+  - title: "Concluding remarks"
+    number: "6❱"
+    content:
+      - type: items
+        bullets:
+          - Single process execution is "the way to go" for HPC systems!
+          - Automating containerization helps with dev productivity
+          - Containers ease software/data sharing at frozen versions
+          - Apptainer is still a bit under-supported on CI/CD systems
+        next_to:
+          target: "{{ last }}"
+          dir: 4*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT
+
+      - type: text
+        text: "For all asssociated materials, and the slides:"
+        next_to:
+          target: "{{ last }}"
+          dir: 3*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT
+
+      - type: items
+        bullets:
+          - https://github.com/FoamScience/lichtenberg-training-apptainers-presentation
+          - https://foamscience.github.io/lichtenberg-training-apptainers-presentation
+        colors:
+          - text: https://github.com/FoamScience/lichtenberg-training-apptainers-presentation
+            color: self.main_color
+          - text: https://foamscience.github.io/lichtenberg-training-apptainers-presentation
+            color: self.main_color
+        next_to:
+          target: "{{ last }}"
+          dir: 2*DOWN
+        align_to:
+          target: "{{ last }}"
+          dir: LEFT

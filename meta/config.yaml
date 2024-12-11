@@ -1,0 +1,13 @@
+title: "Apptainer Containers for HPC systems"
+footer:
+  text: Practical Container Workshop for HPC Administrators
+  bold:
+    - Practical Container Workshop for HPC Administrators
+author: Mohammed Elwardi Fadeli
+time: Dec. 2024
+logo:
+  image: nhr-tu-logo.png
+  shift: 1.5*UP
+  scale: 0.6
+base_url: https://foamscience.github.io/lichtenberg-training-containers-presentation
+thanks: THANK YOU for your attention!
